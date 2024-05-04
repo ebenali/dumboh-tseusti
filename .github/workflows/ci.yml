@@ -1,5 +1,5 @@
 ---
-name: CI
+name: CI-maybe-tag-release
 
 on:
   push:
@@ -36,14 +36,14 @@ jobs:
         with:
           node-version: "21.x"
 
-      #- name: Configure SSH/Git permissions
-      #  run: |
-      #    mkdir -p ~/.ssh
-      #    chmod 700 ~/.ssh
-      #    ssh-keyscan github.com >> ~/.ssh/known_hosts
-      #    chmod 600 ~/.ssh/known_hosts
-      #    ssh-agent -a $SSH_AUTH_SOCK >/dev/null 2>&1
-      #    ssh-add - <<< "${{ secrets.SSH_GHACTION_PRIVKEY }}"
+      # - name: Configure SSH/Git permissions
+      #   run: |
+      #     mkdir -p ~/.ssh
+      #     chmod 700 ~/.ssh
+      #     ssh-keyscan github.com >> ~/.ssh/known_hosts
+      #     chmod 600 ~/.ssh/known_hosts
+      #     ssh-agent -a $SSH_AUTH_SOCK >/dev/null 2>&1
+      #     ssh-add - <<< "${{ secrets.SSH_GHACTION_PRIVKEY }}"
 
       - name: Checkout
         uses: actions/checkout@v3
@@ -60,7 +60,6 @@ jobs:
         run: |
           true
 
-      
       - name: Package
         if: |
           github.event_name == 'push' &&
@@ -87,7 +86,7 @@ jobs:
         if: |
           github.event_name == 'push' &&
           github.ref == 'refs/heads/dev' &&
-          steps.build_step.outcome == 'success' && 
+          steps.build_step.outcome == 'success' &&
           steps.test_step.outcome == 'success' &&
           steps.tag_release_step.outcome == 'success'
         uses: ncipollo/release-action@v1
@@ -96,6 +95,23 @@ jobs:
           name: Release ${{ steps.tag_release_step.outputs.new_tag }}
           body: ${{ steps.tag_release_step.outputs.changelog }}
           artifacts: "wassup.tar.xz"
+
+      - name: Update Release Tag in package.json (onto-dev-branch)
+        if: |
+          github.event_name == 'push' &&
+          github.ref == 'refs/heads/dev' &&
+          steps.build_step.outcome == 'success' &&
+          steps.test_step.outcome == 'success' &&
+          steps.tag_release_step.outcome =='success'
+        id: tag_package_json_step
+        run: |
+          git config --global user.name "GH-Action-Upd-Package-Tag"
+          git config --global user.email "githubci@tradeterminal.io"
+          jq '.version = "'${{ steps.tag_release_step.outputs.new_version }}'"'\
+            package.json > package.json.tmp
+          mv package.json.tmp package.json
+          git commit package.json -m "[bot] GH-Action-Upd-Package-Tag"
+          git push -u origin dev
 
       - name: Slack Notify (success)
         if: success()
