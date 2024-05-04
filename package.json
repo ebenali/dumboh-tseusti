@@ -8,7 +8,7 @@
     "scripts": {
         "test": "echo tried && true",
         "build": "tsc && cp package.json build/",
-        "package": "tar -cJvf wassup.tar.xz build/"
+        "package": "yarn build && tar -cJvf wassup.tar.xz build/"
     },
     "author": "wassup@127.0.0.1",
     "license": "MIT",
