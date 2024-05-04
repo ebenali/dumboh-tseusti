@@ -9,4 +9,4 @@ anyway, it's a good place to start. (deed it is)
 ### (the rest)
 - If anyone wants to use this, go ahead.
 - License is MIT.
-- I genuinely assume you know what you're doing.
+- I genuinely know you know what you're doing.
