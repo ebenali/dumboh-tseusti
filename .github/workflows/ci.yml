@@ -53,7 +53,7 @@ jobs:
       - name: Build
         id: build_step
         run: |
-          yarn run install
+          yarn install
 
       - name: Build
         id: test_step
