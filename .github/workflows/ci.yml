@@ -71,9 +71,8 @@ jobs:
 
       - name: Tag Release (onto-dev-branch)
         if: |
-          github.event_name == 'pull_request' &&
-          github.event.pull_request.merged &&
-          github.base_ref == 'dev' &&
+          github.event_name == 'push' &&
+          github.ref == 'refs/heads/dev' &&
           steps.build_step.outcome == 'success' &&
           steps.test_step.outcome == 'success'
         id: tag_release_step
@@ -85,9 +84,8 @@ jobs:
 
       - name: Release (onto-dev-branch)
         if: |
-          github.event_name == 'pull_request' && 
-          github.event.pull_request.merged && 
-          github.base_ref == 'dev' && 
+          github.event_name == 'push' &&
+          github.ref == 'refs/heads/dev' &&
           steps.build_step.outcome == 'success' && 
           steps.test_step.outcome == 'success' &&
           steps.tag_release_step.outcome == 'success'
