@@ -1,0 +1,121 @@
+---
+name: CI
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    types: [opened, edited, closed]
+
+# env:
+#   SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+
+jobs:
+  build-test:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Slack notification
+        id: slack_notif
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          channel_id: C027BRAE1Q9
+          status: Github CI pipeline execution started...
+          color: warning
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+
+      #- name: Install dependencies
+      #  run: |
+      #    sudo apt update
+      #    sudo apt install --no-install-recommends -y git
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "21.x"
+
+      #- name: Configure SSH/Git permissions
+      #  run: |
+      #    mkdir -p ~/.ssh
+      #    chmod 700 ~/.ssh
+      #    ssh-keyscan github.com >> ~/.ssh/known_hosts
+      #    chmod 600 ~/.ssh/known_hosts
+      #    ssh-agent -a $SSH_AUTH_SOCK >/dev/null 2>&1
+      #    ssh-add - <<< "${{ secrets.SSH_GHACTION_PRIVKEY }}"
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Build
+        id: build_step
+        run: |
+          true
+
+      - name: Build
+        id: test_step
+        run: |
+          true
+
+      
+      - name: Package
+        if: |
+          github.event_name == 'push' &&
+          github.ref == 'refs/heads/dev' &&
+          steps.build_step.outcome == 'success' &&
+          steps.test_step.outcome == 'success'
+        run: |
+          yarn run package
+
+      - name: Tag Release (onto-dev-branch)
+        if: |
+          github.event_name == 'pull_request' &&
+          github.event.pull_request.merged &&
+          github.base_ref == 'dev' &&
+          steps.build_step.outcome == 'success' &&
+          steps.test_step.outcome == 'success'
+        id: tag_release_step
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          release_branches: "main"
+          pre_release_branches: "rc"
+
+      - name: Release (onto-dev-branch)
+        if: |
+          github.event_name == 'pull_request' && 
+          github.event.pull_request.merged && 
+          github.base_ref == 'dev' && 
+          steps.build_step.outcome == 'success' && 
+          steps.test_step.outcome == 'success' &&
+          steps.tag_release_step.outcome == 'success'
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.tag_release_step.outputs.new_tag }}
+          name: Release ${{ steps.tag_release_step.outputs.new_tag }}
+          body: ${{ steps.tag_release_step.outputs.changelog }}
+          artifacts: "build/backtester,build/live_strategy"
+
+      - name: Slack Notify (success)
+        if: success()
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          message_id: ${{ steps.slack_notif.outputs.message_id }}
+          channel_id: C027BRAE1Q9
+          status: SUCCESS
+          color: good
+
+      - name: Slack Notify (failure)
+        if: failure()
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          message_id: ${{ steps.slack_notif.outputs.message_id }}
+          channel_id: C027BRAE1Q9
+          status: FAILED
+          color: danger
