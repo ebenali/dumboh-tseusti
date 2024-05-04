@@ -25,10 +25,11 @@ jobs:
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
 
-      #- name: Install dependencies
-      #  run: |
-      #    sudo apt update
-      #    sudo apt install --no-install-recommends -y git
+      - name: Install dependencies
+        run: |
+          #sudo apt update
+          #sudo apt install --no-install-recommends -y git
+          sudo corepack enable
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
