@@ -52,7 +52,7 @@ jobs:
       - name: Build
         id: build_step
         run: |
-          true
+          yarn run install
 
       - name: Build
         id: test_step
@@ -67,7 +67,7 @@ jobs:
           steps.build_step.outcome == 'success' &&
           steps.test_step.outcome == 'success'
         run: |
-          true
+          yarn run package
 
       - name: Tag Release (onto-dev-branch)
         if: |
@@ -94,7 +94,7 @@ jobs:
           tag: ${{ steps.tag_release_step.outputs.new_tag }}
           name: Release ${{ steps.tag_release_step.outputs.new_tag }}
           body: ${{ steps.tag_release_step.outputs.changelog }}
-          artifacts: "README.md"
+          artifacts: "wassup.tar.xz"
 
       - name: Slack Notify (success)
         if: success()
