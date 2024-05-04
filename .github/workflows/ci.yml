@@ -67,7 +67,7 @@ jobs:
           steps.build_step.outcome == 'success' &&
           steps.test_step.outcome == 'success'
         run: |
-          yarn run package
+          true
 
       - name: Tag Release (onto-dev-branch)
         if: |
