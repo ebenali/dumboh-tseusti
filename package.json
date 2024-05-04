@@ -1,16 +1,23 @@
 {
     "name": "wassup",
     "version": "1.0.0",
+    "type": "module",
     "packageManager": "yarn@4.1.0",
     "description": "A simple wassup app",
     "main": "index.js",
     "scripts": {
         "test": "echo tried && true",
-        "package": "tar -cJvf wassup.tar.xz index.js package.json"
+        "build": "tsc && cp package.json build/",
+        "package": "tar -cJvf wassup.tar.xz build/"
     },
     "author": "wassup@127.0.0.1",
     "license": "MIT",
     "dependencies": {
-        "@types/node": "^20.12.8"
+        "@types/node": "^20.12.8",
+        "chalk": "5.3.0",
+        "typescript": "^5.4.5"
+    },
+    "devDependencies": {
+        "@types/chalk": "^2.2.0"
     }
 }

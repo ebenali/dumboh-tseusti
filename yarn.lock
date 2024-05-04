@@ -5,12 +5,48 @@ __metadata:
   version: 8
   cacheKey: 10c0
 
+"@types/chalk@npm:^2.2.0":
+  version: 2.2.0
+  resolution: "@types/chalk@npm:2.2.0"
+  dependencies:
+    chalk: "npm:*"
+  checksum: 10c0/d408e65041f37db0211574d72300058538beac430bd636e6ebc51fad15e954de35796dea42ab9706b0f1f96c15d2e68dce14de22d7a0755270a6d86ac2813390
+  languageName: node
+  linkType: hard
+
 "@types/node@npm:^20.12.8":
   version: 20.12.8
   resolution: "@types/node@npm:20.12.8"
   dependencies:
     undici-types: "npm:~5.26.4"
   checksum: 10c0/840002d20654e38a9af8cdffa215598fdb28ac4f96c5701ed672ec365ed6ccc66da299edddaa409baf13cd71bbf1128901f633b5e44e070fc236e26415805b78
+  languageName: node
+  linkType: hard
+
+"chalk@npm:*, chalk@npm:5.3.0":
+  version: 5.3.0
+  resolution: "chalk@npm:5.3.0"
+  checksum: 10c0/8297d436b2c0f95801103ff2ef67268d362021b8210daf8ddbe349695333eb3610a71122172ff3b0272f1ef2cf7cc2c41fdaa4715f52e49ffe04c56340feed09
+  languageName: node
+  linkType: hard
+
+"typescript@npm:^5.4.5":
+  version: 5.4.5
+  resolution: "typescript@npm:5.4.5"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 10c0/2954022ada340fd3d6a9e2b8e534f65d57c92d5f3989a263754a78aba549f7e6529acc1921913560a4b816c46dce7df4a4d29f9f11a3dc0d4213bb76d043251e
+  languageName: node
+  linkType: hard
+
+"typescript@patch:typescript@npm%3A^5.4.5#optional!builtin<compat/typescript>":
+  version: 5.4.5
+  resolution: "typescript@patch:typescript@npm%3A5.4.5#optional!builtin<compat/typescript>::version=5.4.5&hash=d69c25"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 10c0/9cf4c053893bcf327d101b6c024a55baf05430dc30263f9adb1bf354aeffc11306fe1f23ba2f9a0209674359f16219b5b7d229e923477b94831d07d5a33a4217
   languageName: node
   linkType: hard
 
@@ -25,6 +61,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "wassup@workspace:."
   dependencies:
+    "@types/chalk": "npm:^2.2.0"
     "@types/node": "npm:^20.12.8"
+    chalk: "npm:5.3.0"
+    typescript: "npm:^5.4.5"
   languageName: unknown
   linkType: soft

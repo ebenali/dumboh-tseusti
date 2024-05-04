@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "target": "es2022",
+        "jsx": "preserve",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
+        "lib": [
+            "ES2022",
+            "WebWorker"
+        ],
+        "rootDir": "./",
+        "outDir": "./build/"
+    },
+    "buildOptions": {
+        "incremental": true
+    },
+    "files": [
+        "index.ts"
+    ]
+}
