@@ -6,7 +6,7 @@ import { log, error } from "node:console"
 import { default as chalk } from "chalk";
 
 async function main() {
-    log(chalk.green('Wassup, World!'));
+    log(chalk.red('Wassup, World!'));
 }
 
 main().catch(error);
