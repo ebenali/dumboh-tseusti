@@ -1,0 +1,16 @@
+{
+    "name": "wassup",
+    "version": "1.0.0",
+    "packageManager": "yarn@4.1.0",
+    "description": "A simple wassup app",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo tried && true",
+        "package": "tar -cJvf wassup.tar.xz index.js package.json"
+    },
+    "author": "wassup@127.0.0.1",
+    "license": "MIT",
+    "dependencies": {
+        "@types/node": "^20.12.8"
+    }
+}
